@@ -7,6 +7,8 @@ import { comparePassword } from "@/utils/password";
 import authService from "./auth.service";
 import { IUser, UserModel } from "@/models/user/types";
 import { Role } from "@/global";
+import { NextFunction, Request, Response } from "express";
+import jwtInstance from "@/utils/jwt";
 
 export class UserService {
   constructor(protected userModel: UserModel) {}
@@ -177,13 +179,92 @@ export class UserService {
 
   public async getAllUsers(includeAdmins: boolean = false) {
     if (includeAdmins) {
-      return await this.userModel
-        .find({})
-        .populate("owned_products", "paychecks");
+      return await this.userModel.find({});
     }
-    return await this.userModel
-      .find({ role: Role.USER })
-      .populate("owned_products", "paychecks");
+    return await this.userModel.find({ role: Role.USER });
+  }
+
+  // api tokens
+  public async createApiToken({
+    user_id,
+    name,
+  }: {
+    user_id: string;
+    name: string;
+  }) {
+    const newApiToken = await jwtInstance.generateApiToken(user_id);
+    const payload: any = {
+      token: newApiToken,
+      name,
+    };
+    await this.userModel.findByIdAndUpdate(
+      user_id,
+      {
+        $push: { api_tokens: payload },
+      },
+      { new: true }
+    );
+    return {
+      message: "Token created",
+      api_token: payload,
+    };
+  }
+  public async deleteApiToken({
+    token,
+    user_id,
+  }: {
+    user_id: string;
+    token: string;
+  }) {
+    const verifyApiToken = await jwtInstance.verifyApiToken(token);
+    if (!verifyApiToken.success) {
+      throw new UnauthorizedError({
+        message: "Invalid token",
+      });
+    }
+    if (verifyApiToken.user_id !== user_id) {
+      throw new UnauthorizedError({
+        message: "Invalid token",
+      });
+    }
+    await this.userModel.findByIdAndUpdate(
+      user_id,
+      {
+        $pull: { api_tokens: { token } },
+      },
+      { new: true }
+    );
+    return {
+      message: "Token deleted",
+      deleted_api_token: token,
+    };
+  }
+  public async deleteAllApiTokens(user_id: string) {
+    await this.userModel.findByIdAndUpdate(
+      user_id,
+      {
+        $set: { api_tokens: [] },
+      },
+      { new: true }
+    );
+    return {
+      message: "All tokens deleted",
+    };
+  }
+  public async verifyApiToken(token: string) {
+    const verifyApiToken = await jwtInstance.verifyApiToken(token);
+    if (!verifyApiToken.success) {
+      return {
+        success: false,
+        message: "Token is invalid",
+        user_id: "",
+      };
+    }
+    return {
+      success: true,
+      message: "Token is valid",
+      user_id: verifyApiToken.user_id,
+    };
   }
 }
 

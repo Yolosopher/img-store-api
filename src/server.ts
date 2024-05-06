@@ -6,6 +6,10 @@ declare global {
   namespace Express {
     interface Request {
       current_user?: ICurrentUser;
+      api_token?: {
+        user_id: string;
+        token: string;
+      };
     }
   }
 }

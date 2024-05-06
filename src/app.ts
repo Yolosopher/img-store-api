@@ -12,6 +12,7 @@ import authRoutes from "./routes/auth/routes";
 import userRoutes from "./routes/user/routes";
 import adminRoutes from "./routes/admin/routes";
 import redis from "./redis";
+import imageRoutes from "./routes/image-store/routes";
 
 class App {
   public httpServer: Server;
@@ -63,16 +64,16 @@ class App {
     this._app.use(urlencoded({ extended: true }));
   }
   private setupRoutes() {
-    // current user middleware
-    this._app.use(currentUser);
-
     // healthcheck route
-    this._app.get("/healthcheck", (req, res) => res.json({ status: "ok" }));
+    this._app.get("/healthcheck", currentUser, (req, res) =>
+      res.json({ status: "ok" })
+    );
 
     // write your routes here
-    this._app.use("/auth", authRoutes);
-    this._app.use("/user", userRoutes);
-    this._app.use("/admin", adminRoutes);
+    this._app.use("/auth", currentUser, authRoutes);
+    this._app.use("/user", currentUser, userRoutes);
+    this._app.use("/admin", currentUser, adminRoutes);
+    this._app.use("/image", imageRoutes);
 
     // Add error handling middleware here
     this._app.use(errorHandler);

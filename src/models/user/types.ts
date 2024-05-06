@@ -8,6 +8,7 @@ export interface IUser extends Document {
   password: string;
   deleted: boolean;
   role: Role;
+  api_tokens: { token: string; name: string }[];
 }
 
 // export interface IUserPopulated

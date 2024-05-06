@@ -3,7 +3,11 @@ import { Router } from "express";
 import asyncHandler from "express-async-handler";
 import requireAuth from "@/middlewares/requireauth.mw";
 import validateZod from "@/middlewares/zodvalidate.mw";
-import { updateFullnameSchema, updatePasswordSchema } from "@/lib/zod/user";
+import {
+  createApiTokenSchema,
+  updateFullnameSchema,
+  updatePasswordSchema,
+} from "@/lib/zod/user";
 
 const userRoutes = Router();
 
@@ -21,4 +25,22 @@ userRoutes.put(
   validateZod(updatePasswordSchema, "body"),
   asyncHandler(userController.changePassword)
 );
+
+userRoutes.post(
+  "/api_token/create",
+  requireAuth,
+  validateZod(createApiTokenSchema, "body"),
+  asyncHandler(userController.createApiToken)
+);
+userRoutes.delete(
+  "/api_token/all",
+  requireAuth,
+  asyncHandler(userController.deleteAllApiTokens)
+);
+userRoutes.delete(
+  "/api_token/:token",
+  requireAuth,
+  asyncHandler(userController.deleteApiToken)
+);
+
 export default userRoutes;

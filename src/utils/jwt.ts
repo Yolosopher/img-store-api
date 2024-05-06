@@ -9,9 +9,13 @@ import jwt from "jsonwebtoken";
 class JWT {
   private secret: string;
   private expiresIn: string;
+  private api_token_expires_in: string;
   constructor(private sessionService: SessionService) {
     this.secret = CONFIG.secret_key;
     this.expiresIn = CONFIG.jwt_expires_in;
+
+    // api tokens
+    this.api_token_expires_in = "30y";
   }
   public async generate(payload: JWT_PAYLOAD) {
     const token = jwt.sign(payload, this.secret, {
@@ -62,6 +66,24 @@ class JWT {
   }
   public async blacklist(params: SessionServiceMethodParams) {
     await this.sessionService.blacklistToken(params);
+  }
+
+  // api tokens
+  public async generateApiToken(user_id: string) {
+    const api_token = jwt.sign({ user_id }, this.secret, {
+      expiresIn: this.api_token_expires_in,
+    });
+    return api_token;
+  }
+  public async verifyApiToken(
+    token: string
+  ): Promise<{ success: boolean; user_id?: string }> {
+    try {
+      const result = jwt.verify(token, this.secret) as { user_id: string };
+      return { success: true, user_id: result.user_id };
+    } catch (error) {
+      return { success: false };
+    }
   }
 }
 

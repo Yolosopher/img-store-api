@@ -4,7 +4,6 @@ import authService from "@/services/user/auth.service";
 import { Request, Response } from "express";
 
 class UserController {
-  constructor() {}
   public async create(req: Request, res: Response) {
     const { email, full_name, password } = req.body;
 
@@ -113,6 +112,36 @@ class UserController {
       message: "All users",
       users,
     });
+  }
+
+  // api tokens
+  public async createApiToken(req: Request, res: Response) {
+    const { _id } = req.current_user!;
+    const name = req?.body?.name || "default";
+
+    const token = await userService.createApiToken({ user_id: _id, name });
+
+    res.status(201).json({
+      ...token,
+      message: "Api token created",
+    });
+  }
+
+  public async deleteApiToken(req: Request, res: Response) {
+    const { _id } = req.current_user!;
+    const { token } = req.params;
+
+    const result = await userService.deleteApiToken({ user_id: _id, token });
+
+    res.status(200).json(result);
+  }
+
+  public async deleteAllApiTokens(req: Request, res: Response) {
+    const { _id } = req.current_user!;
+
+    const result = await userService.deleteAllApiTokens(_id);
+
+    return res.status(200).json(result);
   }
 }
 

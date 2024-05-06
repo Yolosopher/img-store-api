@@ -44,3 +44,11 @@ export const registerResponseSchema = z.object({
   message: z.literal("Sign up successful"),
   current_user: currentUserInResponseSchema,
 });
+
+export const createApiTokenSchema = z.object({
+  name: z
+    .string({
+      message: "Token name must be a string",
+    })
+    .optional(),
+});

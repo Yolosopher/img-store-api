@@ -29,6 +29,31 @@ const UserSchema = new Schema<IUser>(
       enum: [Role.ADMIN, Role.SUPER_ADMIN, Role.USER],
       default: Role.USER,
     },
+    api_tokens: {
+      type: [
+        new Schema(
+          {
+            token: {
+              type: String,
+              required: true,
+            },
+            name: {
+              type: String,
+              required: true,
+            },
+          },
+          {
+            _id: false,
+            versionKey: false,
+            timestamps: {
+              createdAt: "created_at",
+              updatedAt: false,
+            },
+          }
+        ),
+      ],
+      default: [],
+    },
   },
   {
     timestamps: {

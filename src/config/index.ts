@@ -1,5 +1,6 @@
 import { NODE_ENV_TYPE } from "@/global";
 import "dotenv/config";
+import path from "path";
 
 export const parseTimeSpanToMilliseconds = (timeSpan: string): number => {
   const matches = timeSpan.match(/^(\d+)([smhd])$/);
@@ -45,6 +46,8 @@ const CONFIG = {
     email: process.env.DEFAULT_SUPER_ADMIN_EMAIL!,
     password: process.env.DEFAULT_SUPER_ADMIN_PASSWORD!,
   },
+
+  image_upload_path: path.resolve(process.env.IMAGE_UPLOAD_PATH! || "uploads"),
 };
 
 export default CONFIG;
