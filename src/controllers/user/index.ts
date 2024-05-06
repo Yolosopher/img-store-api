@@ -121,10 +121,7 @@ class UserController {
 
     const token = await userService.createApiToken({ user_id: _id, name });
 
-    res.status(201).json({
-      ...token,
-      message: "Api token created",
-    });
+    res.status(201).json(token);
   }
 
   public async deleteApiToken(req: Request, res: Response) {

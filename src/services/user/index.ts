@@ -191,7 +191,7 @@ export class UserService {
   }: {
     user_id: string;
     name: string;
-  }) {
+  }): Promise<{ message: string; token: string; name: string }> {
     const newApiToken = await jwtInstance.generateApiToken(user_id);
     const payload: any = {
       token: newApiToken,
@@ -205,8 +205,8 @@ export class UserService {
       { new: true }
     );
     return {
-      message: "Token created",
-      api_token: payload,
+      message: "Api token created successfully",
+      ...payload,
     };
   }
   public async deleteApiToken({
@@ -235,7 +235,7 @@ export class UserService {
       { new: true }
     );
     return {
-      message: "Token deleted",
+      message: "Api token deleted successfully",
       deleted_api_token: token,
     };
   }
@@ -248,7 +248,7 @@ export class UserService {
       { new: true }
     );
     return {
-      message: "All tokens deleted",
+      message: "All api tokens deleted successfully",
     };
   }
   public async verifyApiToken(token: string) {
