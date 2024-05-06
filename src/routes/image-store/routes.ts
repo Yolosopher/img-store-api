@@ -1,10 +1,10 @@
 import imageStoreController from "@/controllers/image-store";
+import asyncHandler from "@/middlewares/asyncHandler";
 import uploadMiddleware from "@/middlewares/file-upload";
 import requireApiToken from "@/middlewares/requireApiToken";
 import useApiToken from "@/middlewares/useApiToken";
 import validateZod from "@/middlewares/zodvalidate.mw";
 import { Router } from "express";
-import asyncHandler from "express-async-handler";
 
 const imageRoutes = Router();
 

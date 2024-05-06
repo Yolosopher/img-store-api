@@ -1,6 +1,5 @@
 import userController from "@/controllers/user";
 import { Router } from "express";
-import asyncHandler from "express-async-handler";
 import requireAuth from "@/middlewares/requireauth.mw";
 import validateZod from "@/middlewares/zodvalidate.mw";
 import {
@@ -8,6 +7,7 @@ import {
   updateFullnameSchema,
   updatePasswordSchema,
 } from "@/lib/zod/user";
+import asyncHandler from "@/middlewares/asyncHandler";
 
 const userRoutes = Router();
 

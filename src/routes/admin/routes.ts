@@ -1,9 +1,9 @@
 import userController from "@/controllers/user";
+import asyncHandler from "@/middlewares/asyncHandler";
 import requireAdmin from "@/middlewares/requireadmin.mw";
 import requireSuperAdmin from "@/middlewares/requiresuperadmin.mw";
 import userService from "@/services/user";
 import { Router } from "express";
-import asyncHandler from "express-async-handler";
 
 const adminRoutes = Router();
 
