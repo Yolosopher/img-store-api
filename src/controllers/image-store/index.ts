@@ -1,7 +1,7 @@
 import CONFIG from "@/config";
 import ForbiddenError from "@/errors/ForbiddenError";
 import { ReadAccess } from "@/models/image-store/types";
-import imageStoreService from "@/services/image-store";
+import imageStoreService, { GetMyImagesParams } from "@/services/image-store";
 import { Request, Response } from "express";
 
 class ImageStoreController {
@@ -53,7 +53,19 @@ class ImageStoreController {
   }
   public async getMyImages(req: Request, res: Response) {
     const { user_id } = req.api_token!;
-    const images = await imageStoreService.getMyImages(user_id);
+
+    const { access } = req.query;
+
+    const query: GetMyImagesParams = {
+      owner: user_id,
+    };
+    if (access === ReadAccess.PUBLIC) {
+      query.read_access = ReadAccess.PUBLIC;
+    } else if (access === ReadAccess.PRIVATE) {
+      query.read_access = ReadAccess.PRIVATE;
+    }
+
+    const images = await imageStoreService.getMyImages(query);
 
     res.status(200).json(images);
   }

@@ -6,6 +6,11 @@ import { ImageStoreModel, ReadAccess } from "@/models/image-store/types";
 import { unlink } from "fs";
 import path from "path";
 
+export type GetMyImagesParams = {
+  owner: string;
+  read_access?: ReadAccess;
+};
+
 class ImageStoreService {
   constructor(private imageStoreModel: ImageStoreModel) {}
 
@@ -55,8 +60,8 @@ class ImageStoreService {
       deleted_image: image,
     };
   }
-  public async getMyImages(owner: string) {
-    return await this.imageStoreModel.find({ owner });
+  public async getMyImages(query: GetMyImagesParams) {
+    return await this.imageStoreModel.find(query);
   }
 
   private deleteImageFromFS(name: string) {
