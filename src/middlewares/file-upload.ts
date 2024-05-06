@@ -15,27 +15,26 @@ const checkFolderAndCreateIfNotExists = (pathToFolder: string) => {
 
 const storage = diskStorage({
   destination: function (req: Request, file, cb) {
-    const read_access = req.body.read_access;
+    const read_access = req.body.access;
     if (
       read_access !== ReadAccess.PRIVATE &&
       read_access !== ReadAccess.PUBLIC
     ) {
       return cb(
         new BadRequestError({
-          message: "Invalid read access",
+          message:
+            "The 'access' field is required and must be either private or public",
         }),
         ""
       );
     }
 
     const dest = CONFIG.image_upload_path;
-    console.log("dest", dest);
-
     checkFolderAndCreateIfNotExists(dest);
     cb(null, dest);
   },
   filename: function (req: Request, file, cb) {
-    const read_access = req.body.read_access;
+    const read_access = req.body.access;
     if (
       read_access !== ReadAccess.PRIVATE &&
       read_access !== ReadAccess.PUBLIC

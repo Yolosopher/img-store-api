@@ -3,7 +3,6 @@ import asyncHandler from "@/middlewares/asyncHandler";
 import uploadMiddleware from "@/middlewares/file-upload";
 import requireApiToken from "@/middlewares/requireApiToken";
 import useApiToken from "@/middlewares/useApiToken";
-import validateZod from "@/middlewares/zodvalidate.mw";
 import { Router } from "express";
 
 const imageRoutes = Router();
@@ -20,6 +19,11 @@ imageRoutes.delete(
   "/:name",
   requireApiToken,
   asyncHandler(imageStoreController.deleteImage)
+);
+imageRoutes.patch(
+  "/:name",
+  requireApiToken,
+  asyncHandler(imageStoreController.changeImageAccess)
 );
 
 imageRoutes.get(

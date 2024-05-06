@@ -31,7 +31,7 @@ export const parseTimeSpanToMilliseconds = (timeSpan: string): number => {
 
   return value * multiplier;
 };
-
+const node_env = process.env.NODE_ENV! as NODE_ENV_TYPE;
 const expiresIn = process.env.JWT_EXPIRES_IN || "30d";
 const CONFIG = {
   mongo_url: process.env.MONGO_URL || "mongodb://localhost:27017",
@@ -40,14 +40,17 @@ const CONFIG = {
   jwt_expires_in: expiresIn,
   jwt_expires_in_ms: parseTimeSpanToMilliseconds(expiresIn),
   app_name: process.env.APP_NAME || "app-name",
-  node_env: process.env.NODE_ENV! as NODE_ENV_TYPE,
+  node_env,
 
   default_super_admin: {
     email: process.env.DEFAULT_SUPER_ADMIN_EMAIL!,
     password: process.env.DEFAULT_SUPER_ADMIN_PASSWORD!,
   },
 
-  image_upload_path: path.resolve(process.env.IMAGE_UPLOAD_PATH! || "uploads"),
+  image_upload_path:
+    node_env === "test"
+      ? path.resolve(process.env.IMAGE_UPLOAD_PATH! || "test_uploads")
+      : path.resolve(process.env.IMAGE_UPLOAD_PATH! || "uploads"),
 };
 
 export default CONFIG;

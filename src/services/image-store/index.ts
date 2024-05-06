@@ -1,4 +1,5 @@
 import CONFIG from "@/config";
+import BadRequestError from "@/errors/BadRequestError";
 import ForbiddenError from "@/errors/ForbiddenError";
 import NotFoundError from "@/errors/NotFoundError";
 import ImageStore from "@/models/image-store";
@@ -57,7 +58,7 @@ class ImageStoreService {
 
     return {
       message: "Image deleted successfully",
-      deleted_image: image,
+      deleted_image_name: image.name,
     };
   }
   public async getMyImages(query: GetMyImagesParams) {
@@ -75,6 +76,39 @@ class ImageStoreService {
 
   public getImagePath(name: string) {
     return path.resolve(CONFIG.image_upload_path, name);
+  }
+
+  public async changeImageAccess({
+    name,
+    subject_id,
+    access,
+  }: {
+    name: string;
+    subject_id: string;
+    access: ReadAccess;
+  }) {
+    const image = await this.getOne(name);
+
+    if (image.owner.toString() !== subject_id) {
+      throw new ForbiddenError({
+        message: "You do not have permission to change access of this image",
+      });
+    }
+
+    if (image.read_access === access) {
+      throw new BadRequestError({
+        message: "Image access is already set to this value",
+      });
+    }
+
+    image.read_access = access;
+    await image.save();
+
+    return {
+      message: "Image access changed successfully",
+      image_name: image.name,
+      new_access: image.read_access,
+    };
   }
 }
 

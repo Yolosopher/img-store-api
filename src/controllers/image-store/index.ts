@@ -9,7 +9,7 @@ class ImageStoreController {
   public async uploadImage(req: Request, res: Response) {
     const { user_id } = req.api_token!;
     const file = req.file as Express.Multer.File;
-    const read_access = req.body.read_access as ReadAccess;
+    const read_access = req.body.access as ReadAccess;
 
     const image = await imageStoreService.create({
       owner: user_id,
@@ -19,7 +19,7 @@ class ImageStoreController {
 
     res.status(201).json({
       message: "Image uploaded successfully",
-      image,
+      image_name: image.name,
     });
   }
   public async getImage(req: Request, res: Response) {
@@ -49,7 +49,7 @@ class ImageStoreController {
       subject_id: user_id,
     });
 
-    res.status(200).json(image);
+    return res.status(200).json(image);
   }
   public async getMyImages(req: Request, res: Response) {
     const { user_id } = req.api_token!;
@@ -68,6 +68,19 @@ class ImageStoreController {
     const images = await imageStoreService.getMyImages(query);
 
     res.status(200).json(images);
+  }
+  public async changeImageAccess(req: Request, res: Response) {
+    const { name } = req.params;
+    const { access } = req.body;
+    const user_id = req.api_token!.user_id;
+
+    const image = await imageStoreService.changeImageAccess({
+      name,
+      access,
+      subject_id: user_id,
+    });
+
+    res.status(200).json(image);
   }
 }
 
