@@ -59,10 +59,21 @@ const errorHandler = (
   }
 
   // Unhandled errors
-  console.error(JSON.stringify(err, null, 2));
-  return res
-    .status(500)
-    .json({ errors: [{ message: "Something went wrong" }] });
+
+  const toLog =
+    CONFIG.node_env !== "production"
+      ? err.message
+      : "Something went wrong on the server";
+
+  CONFIG.node_env !== "production" &&
+    console.error(JSON.stringify(err, null, 2));
+  return res.status(500).json({
+    errors: [
+      {
+        message: toLog,
+      },
+    ],
+  });
 };
 
 export default errorHandler;

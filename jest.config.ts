@@ -7,7 +7,7 @@ const jestConfig: JestConfigWithTsJest = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
 
   testEnvironment: "node",
-  testMatch: ["**/**/*.test.ts"],
+  testMatch: ["**/**/*.spec.ts"],
   verbose: true,
   forceExit: true,
   clearMocks: true,

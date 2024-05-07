@@ -11,8 +11,8 @@ import { AppConfig, NODE_ENV_TYPE } from "./global";
 import authRoutes from "./routes/auth/routes";
 import userRoutes from "./routes/user/routes";
 import adminRoutes from "./routes/admin/routes";
-import redis from "./redis";
 import imageRoutes from "./routes/image-store/routes";
+import redisClient from "./redis-client";
 
 class App {
   public httpServer: Server;
@@ -46,16 +46,6 @@ class App {
     this._app.set("view engine", ".hbs");
     this._app.set("views", path.resolve("src/views"));
   }
-  public async runRedis() {
-    try {
-      // redis client
-      redis.on("error", (err) => console.log("Redis Client Error", err));
-      await redis.connect();
-      !this.isTestMode && console.log("Connected to Redis");
-    } catch (error) {
-      console.log(error);
-    }
-  }
   private setupMiddlewares() {
     this._app.use(cors());
     this._app.use(json());
@@ -77,8 +67,28 @@ class App {
 
     // Add error handling middleware here
     this._app.use(errorHandler);
+    this._app.use("/*", (req, res) =>
+      res.status(404).json({ message: "Route not found" })
+    );
   }
 
+  public async runRedis() {
+    try {
+      // redis client
+      await redisClient.connect();
+      !this.isTestMode && console.log("Connected to Redis");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  private async closeRedis() {
+    try {
+      await redisClient.disconnect();
+      !this.isTestMode && console.log("Disconnected from Redis");
+    } catch (error) {
+      console.log(error);
+    }
+  }
   public async runDB() {
     try {
       await this.runRedis();
@@ -86,14 +96,6 @@ class App {
         `${this.mongo_url}/${CONFIG.app_name}-${this.mode}`
       );
       !this.isTestMode && console.log("Connected to MongoDB");
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  private async closeRedis() {
-    try {
-      await redis.disconnect();
-      !this.isTestMode && console.log("Disconnected from Redis");
     } catch (error) {
       console.log(error);
     }

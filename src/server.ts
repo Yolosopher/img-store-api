@@ -1,4 +1,3 @@
-import "module-alias/register";
 import App from "./app";
 import CONFIG from "./config";
 import { ICurrentUser } from "./global";

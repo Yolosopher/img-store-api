@@ -1,5 +1,5 @@
 import CONFIG from "@/config";
-import redis from "@/redis";
+import redisClient from "@/redis-client";
 import { RedisClientType } from "redis";
 
 export type SessionServiceMethodParams = { userId: string; token: string };
@@ -45,6 +45,6 @@ export class SessionService {
   }
 }
 
-const sessionService = new SessionService(redis);
+const sessionService = new SessionService(redisClient);
 
 export default sessionService;

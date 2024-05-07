@@ -67,7 +67,6 @@ describe("api_token create POST /user/api_token/create", () => {
       .post("/user/api_token/create")
       .send({ name: "test" });
 
-    console.log(res.body);
     expect(res.status).toBe(403);
     expect(hasThisError(res.body, "You must be logged in to have access")).toBe(
       true
