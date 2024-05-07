@@ -22,6 +22,7 @@ export interface JWT_PAYLOAD {
   email: string;
   full_name: string;
   role: Role;
+  auth_api_token: string;
 }
 
 export interface ICurrentUser extends JWT_PAYLOAD {

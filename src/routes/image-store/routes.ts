@@ -25,7 +25,6 @@ imageRoutes.patch(
   requireApiToken,
   asyncHandler(imageStoreController.changeImageAccess)
 );
-
 imageRoutes.get(
   "/all",
   requireApiToken,

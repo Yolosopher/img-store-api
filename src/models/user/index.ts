@@ -29,6 +29,10 @@ const UserSchema = new Schema<IUser>(
       enum: [Role.ADMIN, Role.SUPER_ADMIN, Role.USER],
       default: Role.USER,
     },
+    auth_api_token: {
+      type: String,
+      default: "",
+    },
     api_tokens: {
       type: [
         new Schema(

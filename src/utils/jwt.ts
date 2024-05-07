@@ -55,6 +55,7 @@ class JWT {
           email: result.email,
           full_name: result.full_name,
           role: result.role,
+          auth_api_token: result.auth_api_token,
         },
       };
     } catch (error: any) {

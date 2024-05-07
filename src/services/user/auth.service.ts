@@ -30,11 +30,17 @@ export class AuthService {
       });
     }
 
-    return await this.userModel.create({
+    const newUser = await this.userModel.create({
       email,
       full_name,
       password,
     });
+    const auth_api_token = await jwtInstance.generateApiToken(
+      newUser._id.toString()
+    );
+    newUser.auth_api_token = auth_api_token;
+    await newUser.save();
+    return newUser;
   }
   public async login({ email, password }: { email: string; password: string }) {
     const user = await this.userModel.findOne({ email });
@@ -66,6 +72,7 @@ export class AuthService {
       email: user.email,
       full_name: user.full_name,
       role: user.role,
+      auth_api_token: user.auth_api_token,
     };
     return {
       ...tokenPayload,
