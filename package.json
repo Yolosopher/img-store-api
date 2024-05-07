@@ -5,8 +5,8 @@
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon ./src/server.ts  --ignore ./data",
-    "start": "node dist/server.js",
+    "dev": "nodemon ./src/server.ts",
+    "start": "NODE_ENV=production node dist/server.js",
     "test": "jest --runInBand",
     "test-watch": "jest --watchAll --runInBand",
     "test-coverage": "jest --coverage --runInBand",
@@ -47,9 +47,13 @@
     "express": "^4.19.2",
     "express-handlebars": "^7.1.2",
     "jsonwebtoken": "^9.0.2",
+    "module-alias": "^2.2.3",
     "mongoose": "^8.3.3",
     "multer": "^1.4.5-lts.1",
     "redis": "^4.6.13",
     "zod": "^3.23.6"
+  },
+  "_moduleAliases": {
+    "@": "./dist"
   }
 }

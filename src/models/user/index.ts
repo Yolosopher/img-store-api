@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { hashPassword } from "@utils/password";
+import { hashPassword } from "@/utils/password";
 import { IUser, UserModel } from "./types";
 import { Role } from "@/global";
 

@@ -1,5 +1,5 @@
 import CONFIG from "@/config";
-import CustomError from "@errors";
+import CustomError from "@/errors";
 import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 

@@ -1,5 +1,5 @@
 import userController from "@/controllers/user";
-import { userCreateSchema, userLoginSchema } from "@lib/zod/user";
+import { userCreateSchema, userLoginSchema } from "@/lib/zod/user";
 import { Router } from "express";
 import validateZod from "@/middlewares/zodvalidate.mw";
 import requireAuth from "@/middlewares/requireauth.mw";

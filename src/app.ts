@@ -116,9 +116,11 @@ class App {
   public async runServer() {
     try {
       await this.runDB();
-      this.httpServer.listen(this.port, () =>
-        console.log(`Server is running on port ${this.port}`)
-      );
+      this.httpServer.listen(this.port, () => {
+        console.log(`Server is running on port ${this.port}`);
+        console.log(`Proccess ID: ${process.pid}`);
+        console.log(`Running on ${this.mode} mode`);
+      });
     } catch (error) {
       console.log(error);
     }

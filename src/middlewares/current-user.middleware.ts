@@ -1,5 +1,5 @@
 import UnauthorizedError from "@/errors/UnauthorizedError";
-import jwtInstance from "@utils/jwt";
+import jwtInstance from "@/utils/jwt";
 import { NextFunction, Request, Response } from "express";
 
 const currentUser = async (req: Request, res: Response, next: NextFunction) => {

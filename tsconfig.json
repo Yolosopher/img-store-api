@@ -12,12 +12,7 @@
     "baseUrl": ".",
     "resolveJsonModule": true,
     "paths": {
-      "@/*": ["src/*"],
-      "@types/*": ["src/types/*"],
-      "@lib/*": ["src/lib/*"],
-      "@utils/*": ["src/utils/*"],
-      "@errors": ["src/errors"],
-      "@errors/*": ["src/errors/*"]
+      "@/*": ["src/*"]
     },
     "types": ["@types/jest"]
   },

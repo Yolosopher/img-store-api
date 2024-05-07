@@ -1,5 +1,5 @@
 import { Role } from "@/global";
-import ForbiddenError from "@errors/ForbiddenError";
+import ForbiddenError from "@/errors/ForbiddenError";
 import { NextFunction, Request, Response } from "express";
 
 const requireSuperAdmin = async (
