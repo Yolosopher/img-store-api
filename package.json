@@ -4,8 +4,8 @@
   "description": "A simple image store API",
   "main": "dist/server.js",
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "dev": "npx ts-node ./src/server.ts",
+    "build": "rm -r dist && tsc && tsc-alias",
+    "dev": "nodemon ./src/server.ts",
     "start": "NODE_ENV=production node dist/server.js",
     "test": "jest --runInBand",
     "test-watch": "jest --watchAll --runInBand",

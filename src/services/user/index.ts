@@ -125,6 +125,12 @@ export class UserService {
     password: string;
     new_password: string;
   }) {
+    if (password === new_password) {
+      throw new BadRequestError({
+        message: "New password must be different",
+      });
+    }
+
     const user = await this.getOne(user_id);
     if (!user) {
       throw new BadRequestError({
