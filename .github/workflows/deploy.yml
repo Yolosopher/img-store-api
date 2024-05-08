@@ -20,5 +20,6 @@ jobs:
             cd /home/yolo/img-store-api
             git pull
             npm i
+            pm2 stop IMG-STORE-API
             npm run build
             pm2 restart IMG-STORE-API
