@@ -96,9 +96,9 @@ class App {
   public async runDB() {
     try {
       await this.runRedis();
-      this.mongooseCon = await connect(
-        `${this.mongo_url}/${CONFIG.app_name}-${this.mode}`
-      );
+      this.mongooseCon = await connect(this.mongo_url, {
+        dbName: `${CONFIG.app_name}-${this.mode}`,
+      });
       !this.isTestMode && console.log("Connected to MongoDB");
     } catch (error) {
       console.log(error);

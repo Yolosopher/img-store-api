@@ -1,9 +1,6 @@
-import CONFIG from "@/config";
 import { RedisClientType, createClient } from "redis";
 
-const redisClient: RedisClientType = createClient({
-  name: CONFIG.app_name,
-});
+const redisClient: RedisClientType = createClient();
 
 redisClient.on("error", (err) => console.log("Redis Client Error", err));
 
