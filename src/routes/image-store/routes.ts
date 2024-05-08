@@ -1,6 +1,8 @@
 import imageStoreController from "@/controllers/image-store";
 import asyncHandler from "@/middlewares/asyncHandler";
-import uploadMiddleware from "@/middlewares/file-upload";
+import uploadMiddleware, {
+  fileSizeController,
+} from "@/middlewares/file-upload";
 import requireApiToken from "@/middlewares/requireApiToken";
 import useApiToken from "@/middlewares/useApiToken";
 import { Router } from "express";
@@ -13,6 +15,7 @@ imageRoutes.post(
   "/upload",
   requireApiToken,
   uploadMiddleware,
+  fileSizeController,
   asyncHandler(imageStoreController.uploadImage)
 );
 imageRoutes.delete(

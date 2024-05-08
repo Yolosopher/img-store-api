@@ -51,6 +51,17 @@ const CONFIG = {
     node_env === "test"
       ? path.resolve(process.env.IMAGE_UPLOAD_PATH! || "test_uploads")
       : path.resolve(process.env.IMAGE_UPLOAD_PATH! || "uploads"),
+  allowed_image_extensions: ["jpg", "jpeg", "webp", "png", "gif"],
+  allowed_image_sizes: {
+    free: {
+      bytes: 5 * 1024 * 1024, // 5MB
+      text: "5MB",
+    },
+    premium: {
+      bytes: 10 * 1024 * 1024, // 10MB
+      text: "10MB",
+    },
+  },
 };
 
 export default CONFIG;

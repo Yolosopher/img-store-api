@@ -65,7 +65,7 @@ class ImageStoreService {
     return await this.imageStoreModel.find(query);
   }
 
-  private deleteImageFromFS(name: string) {
+  public deleteImageFromFS(name: string) {
     const imagePath = this.getImagePath(name);
     unlink(imagePath, (err) => {
       if (err) {
