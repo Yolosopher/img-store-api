@@ -13,6 +13,8 @@ import userRoutes from "./routes/user/routes";
 import adminRoutes from "./routes/admin/routes";
 import imageRoutes from "./routes/image-store/routes";
 import redisClient from "./redis-client";
+import { RedisClientType } from "redis";
+import sessionService from "./services/session";
 
 class App {
   public httpServer: Server;
@@ -22,6 +24,7 @@ class App {
   private _app: Application;
   private mongo_url: string;
   private mongooseCon: null | Mongoose;
+  private redisCon: null | RedisClientType;
   // public listening: Server<typeof IncomingMessage, typeof ServerResponse>;
   constructor({ mode, port, mongo_url }: AppConfig) {
     this.mode = mode;
@@ -29,6 +32,7 @@ class App {
     this.port = port;
     this.mongo_url = mongo_url;
     this.mongooseCon = null;
+    this.redisCon = null;
 
     this._app = express();
 
@@ -75,7 +79,7 @@ class App {
   public async runRedis() {
     try {
       // redis client
-      await redisClient.connect();
+      this.redisCon = await redisClient.connect();
       !this.isTestMode && console.log("Connected to Redis");
     } catch (error) {
       console.log(error);
@@ -109,9 +113,10 @@ class App {
       console.log(error);
     }
   }
-  public async clearTestDB() {
+  public async clearTestDBAndRedis() {
     if (this.isTestMode) {
       await this.mongooseCon?.connection.dropDatabase();
+      await sessionService.deleteAllKeys();
     }
   }
 

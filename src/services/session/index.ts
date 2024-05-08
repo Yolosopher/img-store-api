@@ -43,6 +43,17 @@ export class SessionService {
     await this.redisClient.SREM(activeTokensKey, token);
     await this.redisClient.del(token);
   }
+  public async deleteAllKeys() {
+    try {
+      const pattern = `${this.appname}:*`;
+      const keys = await this.redisClient.keys(pattern);
+      keys.forEach((key) => {
+        this.redisClient.del(key);
+      });
+    } catch (error: any) {
+      console.log("Error in deleteAllKeys in redis", error.message);
+    }
+  }
 }
 
 const sessionService = new SessionService(redisClient);

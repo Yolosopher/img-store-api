@@ -14,6 +14,6 @@ export async function setup() {
 }
 
 export async function teardown() {
-  await app.clearTestDB();
+  await app.clearTestDBAndRedis();
   return await app.closeDB();
 }
