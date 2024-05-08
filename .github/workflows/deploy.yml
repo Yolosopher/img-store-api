@@ -9,32 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: SSH Remote Commands
+      - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@v1.0.3
-
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
         with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        run: npm test # Replace this with your test command
-
-
-      # - name: Deploy if tests pass
-      #   i f: succes s()
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${ { secrets.SERVER_HOST }}
-      #     username: $ {{ secrets.SERVER_USERNAME }}
-      #     password: ${ { secrets.SERVER_PASSWORD }}
-      #     script: |
-      #       # Run commands on the server after successful tests
-      #       echo "Commands to run on the server"
-      #       # Example: ssh user@host "command1 && command2"
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: whoami
