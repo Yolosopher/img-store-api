@@ -4,3 +4,5 @@ dist
 package-lock.json
 uploads
 test_uploads
+ssh/
+deploy.sh
