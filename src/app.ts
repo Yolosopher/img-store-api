@@ -15,6 +15,7 @@ import imageRoutes from "./routes/image-store/routes";
 import redisClient from "./redis-client";
 import { RedisClientType } from "redis";
 import sessionService from "./services/session";
+import userService from "./services/user";
 
 class App {
   public httpServer: Server;
@@ -123,6 +124,7 @@ class App {
   public async runServer() {
     try {
       await this.runDB();
+      await userService.initializeSuperAdmin();
       this.httpServer.listen(this.port, () => {
         console.log(`Server is running on port ${this.port}`);
         console.log(`Proccess ID: ${process.pid}`);
