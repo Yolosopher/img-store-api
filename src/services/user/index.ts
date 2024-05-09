@@ -7,7 +7,6 @@ import { comparePassword } from "@/utils/password";
 import authService from "./auth.service";
 import { IUser, UserModel } from "@/models/user/types";
 import { Role } from "@/global";
-import { NextFunction, Request, Response } from "express";
 import jwtInstance from "@/utils/jwt";
 
 export class UserService {
@@ -195,11 +194,25 @@ export class UserService {
     );
   }
 
-  public async getAllUsers(includeAdmins: boolean = false) {
-    if (includeAdmins) {
-      return await this.userModel.find({});
-    }
-    return await this.userModel.find({ role: Role.USER });
+  public async getAllUsers(
+    query: {
+      role?: string;
+    },
+    pagination: { limit: number; page: number }
+  ) {
+    const lastPage = Math.ceil(
+      (await this.userModel.countDocuments(query)) / pagination.limit
+    );
+    const users = await this.userModel
+      .find(query)
+      .select("-password")
+      .limit(pagination.limit)
+      .skip(pagination.page);
+
+    return {
+      pagination: { ...pagination, lastPage },
+      users,
+    };
   }
 
   // api tokens

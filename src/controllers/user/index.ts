@@ -1,4 +1,6 @@
+import BadRequestError from "@/errors/BadRequestError";
 import UnauthorizedError from "@/errors/UnauthorizedError";
+import { Role } from "@/global";
 import userService from "@/services/user";
 import authService from "@/services/user/auth.service";
 import { Request, Response } from "express";
@@ -104,13 +106,18 @@ class UserController {
     });
   }
   public async getAllUsers(req: Request, res: Response) {
-    const { includeAdmins } = req.query;
+    const { role } = req.query;
 
-    const users = await userService.getAllUsers(includeAdmins === "true");
+    const query: any = {};
+
+    if ([Role.ADMIN, Role.USER, Role.SUPER_ADMIN].includes(role as Role)) {
+      query.role = role;
+    }
+
+    const result = await userService.getAllUsers(query, req.pagination!);
 
     res.status(200).json({
-      message: "All users",
-      users,
+      ...result,
     });
   }
 

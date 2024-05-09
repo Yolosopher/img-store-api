@@ -2,6 +2,7 @@ import userController from "@/controllers/user";
 import asyncHandler from "@/middlewares/asyncHandler";
 import requireAdmin from "@/middlewares/requireadmin.mw";
 import requireSuperAdmin from "@/middlewares/requiresuperadmin.mw";
+import usePagination from "@/middlewares/usePagination";
 import { Router } from "express";
 
 const adminRoutes = Router();
@@ -31,6 +32,7 @@ adminRoutes.get(
 adminRoutes.get(
   "/", // ?includeAdmins=true
   requireAdmin,
+  usePagination,
   asyncHandler(userController.getAllUsers)
 );
 
