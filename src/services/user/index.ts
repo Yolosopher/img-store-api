@@ -51,6 +51,12 @@ export class UserService {
       role: Role.ADMIN,
     });
 
+    const auth_api_token = await jwtInstance.generateApiToken(
+      admin._id.toString()
+    );
+    admin.auth_api_token = auth_api_token;
+    await admin.save();
+
     return {
       code: 201,
       message: "Admin user created",
@@ -84,6 +90,12 @@ export class UserService {
       password: CONFIG.default_super_admin.password,
       role: Role.SUPER_ADMIN,
     });
+
+    const auth_api_token = await jwtInstance.generateApiToken(
+      superAdmin._id.toString()
+    );
+    superAdmin.auth_api_token = auth_api_token;
+    await superAdmin.save();
 
     return {
       code: 201,
