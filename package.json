@@ -1,7 +1,7 @@
 {
   "name": "img-store",
   "version": "1.0.0",
-  "description": "A simple image store API",
+  "description": "img-store-api is a simple image store API built with Node.js and Express, designed to allow users to upload, manage, and access images via a RESTful API.",
   "main": "dist/server.js",
   "scripts": {
     "build": "rm -r dist && tsc && tsc-alias",
