@@ -4,7 +4,7 @@ import ForbiddenError from "@/errors/ForbiddenError";
 import NotFoundError from "@/errors/NotFoundError";
 import ImageStore from "@/models/image-store";
 import { ImageStoreModel, ReadAccess } from "@/models/image-store/types";
-import { unlink } from "fs";
+import { existsSync, unlink } from "fs";
 import path from "path";
 
 export type GetMyImagesParams = {
@@ -62,7 +62,7 @@ class ImageStoreService {
     };
   }
   public async getMyImages(query: GetMyImagesParams) {
-    return await this.imageStoreModel.find(query);
+    return await this.imageStoreModel.find(query).sort("created_at");
   }
 
   public deleteImageFromFS(name: string) {
@@ -75,7 +75,16 @@ class ImageStoreService {
   }
 
   public getImagePath(name: string) {
-    return path.resolve(CONFIG.image_upload_path, name);
+    const pth = path.resolve(CONFIG.image_upload_path, name);
+    // check if the image exists
+
+    if (existsSync(pth) === false) {
+      throw new NotFoundError({
+        message: "Image file not found",
+      });
+    }
+
+    return pth;
   }
 
   public async changeImageAccess({
