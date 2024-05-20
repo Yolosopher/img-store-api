@@ -62,7 +62,7 @@ class ImageStoreService {
     };
   }
   public async getMyImages(query: GetMyImagesParams) {
-    return await this.imageStoreModel.find(query).sort("created_at");
+    return await this.imageStoreModel.find(query).sort("-created_at");
   }
 
   public deleteImageFromFS(name: string) {
